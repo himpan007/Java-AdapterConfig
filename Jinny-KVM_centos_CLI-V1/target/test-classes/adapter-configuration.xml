@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Configuration of adapter properties. These can be accessed in an adapter request handler by
+     invoking AdapterConfigurationManager.getAdapterConfiguration(baseCommand). 
+     
+     NOTES:
+     1. Please note that since this is an xml file, certain characters must be encoded, for example:
+     
+         > (greater-than):        &gt;
+         < (less-than-symbol):    &lt;
+         & (ampersand):           &amp;
+         " (double-quote):        &quot;
+         ' (single-quote):        &apos;
+     
+     2. The logoutTimeoutInMilliseconds value should be set to a relatively short value to avoid
+        unnecessary delays in logging out.  Many times, the connection drops before a response
+        can be delivered to the adapter, which results in a timeout in the logout request.
+     -->
+    
+<adapterConfiguration>
+    <vendor>Jinny</vendor>
+    <model>KVM_centos_CLI</model>
+    <version>V1</version>
+
+	<getUsers>
+	    <getSystemUsers>false</getSystemUsers>
+	    <filterOutDefaultUsers>true</filterOutDefaultUsers>
+	    <defaultUsersList>
+	        <user>nsfnobody</user>
+	        <user>root</user>
+	    </defaultUsersList>
+	</getUsers>
+	 
+    <fingerprintRules>
+         
+         <vendor>
+           <neCommand>cat /etc/*-release</neCommand>
+           <pattern>.*Jinny.*</pattern>
+         </vendor>
+
+         <model>
+           <neCommand>cat /etc/*-release</neCommand>
+           <pattern>.*KVM_centos_CLI.*</pattern>         
+         </model>
+        
+         <version>
+           <neCommand>cat /etc/*-release</neCommand>
+           <pattern>.*.*.*</pattern>  
+         </version>
+         
+     </fingerprintRules>
+     
+     <ne>
+          <lineTermination>\n</lineTermination>
+          <passwordMaskCharacters>********</passwordMaskCharacters>
+          <administrativeStateRawAttributeName>ADMINISTRATIVE_STATE</administrativeStateRawAttributeName>
+     </ne>
+     
+     <interfaceType>
+          <cli>
+              <defaultTimeoutInMilliseconds>60000</defaultTimeoutInMilliseconds>
+              <waitForPromptInMilliseconds>5000</waitForPromptInMilliseconds>
+              <logoutTimeoutInMilliseconds>5000</logoutTimeoutInMilliseconds>
+              <loginPrompt>login:</loginPrompt>
+              <passwordPrompt>Password:</passwordPrompt>
+              <initialNEPrompt>\$$|\$ $|#$|# $|>$|> $</initialNEPrompt>
+              <sudoPrompt>\[sudo\] password for .+: </sudoPrompt>
+              <sshSimpleCommand>pwd</sshSimpleCommand>
+              <keepaliveCommand>pwd</keepaliveCommand>
+              <logoutCommand>logout</logoutCommand>
+              <standardPrompt>NakinaPrompt&gt;&gt;</standardPrompt>
+              <supportsStandardPrompt>false</supportsStandardPrompt>
+                            
+              <resourceRawDataConfigFile>
+		     	  <!-- "@/" means internal .nak resource -->
+		          <location>@/</location>
+		          <rawAttributeRetrieveRule>ReadRules.csv</rawAttributeRetrieveRule>
+		          <rawAttributeReconcileRule>AttributesRules.csv</rawAttributeReconcileRule>
+		          <resourceReconcileRule>ResourcesRules.csv</resourceReconcileRule>
+	     	  </resourceRawDataConfigFile>
+	     	  
+	     	  <!-- separate alternate outputs with double pipe | -->
+	     	  <crud>
+	     	  	<createUser>
+	     	  		<command>useradd</command>
+	     	  		<errorneousOutput>already exists</errorneousOutput>
+     	  		</createUser>
+	     	  	<deleteUser>
+	     	  		<command>userdel</command>
+	     	  		<errorneousOutput>Usage:|does not exist</errorneousOutput>
+     	  		</deleteUser>
+	     	  	<editMyPassword>
+	     	  		<command>passwd</command>
+		     	  	<editMyPasswordExpectedOutput>all authentication tokens updated successfully|passwd: password updated successfully</editMyPasswordExpectedOutput>
+	     	  		<errorneousOutput>Usage:|Authentication token manipulation error|BAD PASSWORD|passwords do not match|Unknown user name|does not exist</errorneousOutput>
+	     	  	</editMyPassword>
+	     	  	<editUser>
+	     	  		<command>passwd</command>
+	     	  		<editUserExpectedOutput>all authentication tokens updated successfully|passwd: password updated successfully</editUserExpectedOutput>
+	     	  		<editUserErrorneousOutput>Usage:|Authentication token manipulation error|BAD PASSWORD|passwords do not match|Unknown user name|does not exist</editUserErrorneousOutput>
+	     	  	</editUser>
+	     	  	<currentPasswordPrompt>\(current\) UNIX password:( ?)$</currentPasswordPrompt>
+	     	  	<newPasswordPrompt>[N|n]ew.+password:( ?)$</newPasswordPrompt>
+	     	  	<retypePasswordPrompt>([R|r]etype )?[N|n]ew.+password:( ?)$</retypePasswordPrompt>
+	     	  </crud>
+	     	  
+	     	  <escalatePrivilege>
+	     	  	<toRoot>su</toRoot>
+	     	  	<passwordPrompt>Password:( ?)$</passwordPrompt>
+	     	  	<switchUser>su -</switchUser>
+	     	  	<errorneousOutput>Authentication failure|No passwd entry for user</errorneousOutput>
+	     	  </escalatePrivilege>
+          </cli>
+          <snmpv4>
+              <defaultTimeoutInMilliseconds>10000</defaultTimeoutInMilliseconds>
+              <keepaliveCommand>sysName</keepaliveCommand>
+          </snmpv4>
+          <ftp>
+              <defaultTimeoutInMilliseconds>1200000</defaultTimeoutInMilliseconds>
+              <waitForPromptInMilliseconds>5000</waitForPromptInMilliseconds>
+              <logoutTimeoutInMilliseconds>5000</logoutTimeoutInMilliseconds>
+              <loginPrompt>Login:</loginPrompt>
+              <keepaliveCommand>pwd</keepaliveCommand>
+              <keepaliveResponseCode>257</keepaliveResponseCode>
+          </ftp>
+          <sftp>
+              <defaultTimeoutInMilliseconds>600000</defaultTimeoutInMilliseconds>
+              <waitForPromptInMilliseconds>5000</waitForPromptInMilliseconds>
+              <logoutTimeoutInMilliseconds>5000</logoutTimeoutInMilliseconds>
+              <initialSftpPrompt>sftp&gt;</initialSftpPrompt>
+              <keepaliveCommand>pwd</keepaliveCommand>
+              <keepaliveResponseCode>257</keepaliveResponseCode>
+          </sftp>
+          <ftps>
+              <defaultTimeoutInMilliseconds>600000</defaultTimeoutInMilliseconds>
+              <waitForPromptInMilliseconds>5000</waitForPromptInMilliseconds>
+              <logoutTimeoutInMilliseconds>5000</logoutTimeoutInMilliseconds>
+              <loginPrompt>Login:</loginPrompt>
+              <keepaliveCommand>pwd</keepaliveCommand>
+              <keepaliveResponseCode>257</keepaliveResponseCode>
+          </ftps>
+          <soap>
+              <defaultTimeoutInMilliseconds>1000</defaultTimeoutInMilliseconds>
+          </soap>
+          <tl1>
+              <defaultTimeoutInMilliseconds>60000</defaultTimeoutInMilliseconds>
+              <logoutTimeoutInMilliseconds>30000</logoutTimeoutInMilliseconds>
+          </tl1>
+     </interfaceType>
+         
+     <capabilities>
+     </capabilities>
+     
+     <!-- ************************************************************************** -->
+     <!--                            NE commands section                             -->                                 
+     <!-- ************************************************************************** -->
+     <!--
+    
+        * Add commands as needed in the <neCommands></neCommands> section in the predefined subsections
+        * Commands are wrapped in a <command></command> tag.  The following syntax must be used:
+        * 
+        * <neCommands>
+        *    <commandParameterSeparator>#</commandParameterSeparator>
+        *    <command>[Command syntax]
+        *        <addToResult>true|false</addToResult>
+        *        <commandTimeoutInMilliseconds>10000</commandTimeoutInMilliseconds>
+        *        <condition>condition,[condition],...]</condition>
+        *        <continueOnError>true|false</continueOnError>
+        *        <description>[Command description]</description>
+        *        <errorMessage>[User custom error message]</errorMessage>
+        *        <neErrorString>[string in the command output that indicates an error]</neErrorString>
+        *        <repeatCommand>true|false</repeatCommand>
+        *    </command>
+        *
+        * Commands can be wrapped with one or more xml tags to group a list of commands together, for example:
+        * 
+        * <neCommands>
+        *     <provisionEthernet>
+        *         <command> ...
+        *         </command>
+        *     </provisionEthernet>
+        * </neCommands>
+        * 
+        * Commands can have parameters defined by the adapter.  Parameter names are delimited by the 
+        * <commandParameterSeparator> character. The adapter will provide values for these parameters. 
+        * The <lineTermination> character will be appended to the end of the command.  For example:
+        *
+        *     <command>set media-type #mediaType#
+        *     ...
+        * 
+        * <addToResult>: If set to "true", the command's response will be added to the response string
+        *     for the commands in the subsection being executed.  By default, addToResult is set to "true".
+        *
+        * <commandTimeoutInMilliseconds>: the timeout for this command, set in milliseconds.
+        *
+        * <condition>: Each command can optionally provide one or more conditions that must evaluate 
+        *     to "true" if the command is to be executed. A condition is of the form:
+        *
+        *     <command parameter>=<string> or <command parameter>!=<string>
+        *
+        * More than one <condition> line can be added.  If so, then all conditions must be met 
+        * in order for the command to be run. If the <condition> line is omitted, the default value 
+        * is "false" (i.e., no condition exists).
+        *
+        * <continueOnError>: If set to "true", the adapter will continue to process commands if
+        *     an error occurs.  By default, <continueOnError> is set to "false".
+        *
+        * <description> is a human-readable description of the command.
+        *
+        * <errorMessage> is a customized error message that will be returned if this command fails.
+        *
+        * <neErrorString> is a string in the response to a command that indicates that the command
+        *     failed.  More than one <neErrorString></neErrorString> line may be used.
+        *
+        * <repeatCommand>: If set to "true", this command will be sent multiple times,
+        *     according to a list of parameter values supplied by the adapter.  The default
+        *     value is "false".
+        *
+
+      -->
+      
+     <neCommands>
+         <commandParameterSeparator>#</commandParameterSeparator>
+         
+     </neCommands>
+     
+</adapterConfiguration>

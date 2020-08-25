@@ -1,0 +1,147 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.nokia.netguard</groupId>
+		<artifactId>adapter</artifactId>
+		<version>19.0.SR6</version>
+		<relativePath>../../adapter</relativePath>
+	</parent>
+	<groupId>com.nokia.netguard.adapter.autologinexecutable</groupId>
+	<artifactId>selenium-autolaunch-template-${project.version}</artifactId>
+	<packaging>jar</packaging>
+	<description>Archetype for Selenium-Java autolaunch scripts</description>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<customer>${adapterCustomer}</customer>
+		<adapter-type>${adapterType}</adapter-type>
+		
+		<archetype-name>selenium-autolaunch</archetype-name>
+		<archetype-description>Autolaunch stand-alone executable JAR file.</archetype-description>
+		<archetype-interfaces>AutoLaunch</archetype-interfaces>
+		<archetype-requests>GUIsso</archetype-requests>
+		<archetype-id>${fullArchetypeId}</archetype-id>
+		
+		<adapter-groupId-part>autologinexecutable</adapter-groupId-part>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-java</artifactId>
+			<version>3.141.59</version>
+		</dependency>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>htmlunit-driver</artifactId>
+			<version>2.33.2</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.tomakehurst</groupId>
+			<artifactId>wiremock-jre8</artifactId>
+			<version>2.23.2</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<profile>
+			<id>adapter-build</id>
+			<activation>
+				<property>
+					<name>!adt-workspace-build</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+						<configuration combine.self="override"></configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+						<executions>
+							<execution>
+								<id>nak-file</id>
+								<phase>none</phase>
+							</execution>
+							<execution>
+								<id>webdrivers-permissions</id>
+								<goals>
+									<goal>run</goal>
+								</goals>
+								<phase>generate-test-resources</phase>
+								<configuration>
+									<target>
+										<chmod dir="${project.build.directory}/classes/drivers" perm="ugo+rx" includes="**/*.drv" />
+									</target>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<configuration combine.self="override"></configuration>
+					</plugin>
+					<plugin>
+						<artifactId>maven-assembly-plugin</artifactId>
+						<configuration>
+							<archive>
+								<manifest>
+									<mainClass>com.nokia.netguard.adapter.${adapter-groupId-part}.AutoLaunch</mainClass>
+								</manifest>
+							</archive>
+						</configuration>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>sonar-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-install-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>adt-workspace-build</id>
+			<activation>
+				<property>
+					<name>adt-workspace-build</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-archetype-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

@@ -1,0 +1,5 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Fri Aug 02 14:37:28 IST 2019
+https\://repo.lab.pl.alcatel-lucent.com/maven2/.lastUpdated=1564736848556
+@default-central-https\://repo.maven.apache.org/maven2/.lastUpdated=1564736228992
+https\://repo.maven.apache.org/maven2/.error=Could not transfer artifact org.apache.maven.plugins\:maven-site-plugin\:jar\:3.3 from/to central (https\://repo.maven.apache.org/maven2)\: connect timed out

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="ASCII"?>
+<adapter:capabilityMap xmlns:adapter="com/nakina/oss/shared/adapter"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="com/nakina/oss/netagent/adapter/xml com/nakina/oss/netagent/adapter/xsd/adapter.xsd"
+  >
+
+  <!-- ==================================================================== -->  
+  <!--                  NE Management Capabilities                          -->
+  <!-- ==================================================================== --> 
+
+  <capability name="NEInterfaceListCapability"
+        class="com.nokia.netguard.adapter.capabilities.NEInterfaceCapabilityHandler"
+        publish="false" />
+  <capability name="NESecurityCapability"
+		class="com.nokia.netguard.adapter.capabilities.NESecurityCommonCapabilityStrategy" 
+		publish="false" />	
+	
+</adapter:capabilityMap>

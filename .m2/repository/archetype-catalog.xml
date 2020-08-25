@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-catalog xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/1.0.0 http://maven.apache.org/xsd/archetype-catalog-1.0.0.xsd"
+    xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-catalog/1.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <archetypes>
+    <archetype>
+      <groupId>com.nokia.netguard.adapter</groupId>
+      <artifactId>adapter-adaptermanaged-template-19.0.SR6-archetype</artifactId>
+      <version>19.0.SR6</version>
+      <description>adapter-adaptermanaged-template-19.0.SR6</description>
+    </archetype>
+    <archetype>
+      <groupId>com.nokia.netguard.adapter</groupId>
+      <artifactId>adapter-cli-template-19.0.SR6-archetype</artifactId>
+      <version>19.0.SR6</version>
+      <description>adapter-cli-template-19.0.SR6</description>
+    </archetype>
+    <archetype>
+      <groupId>com.nokia.netguard.adapter</groupId>
+      <artifactId>adapter-guisso-template-19.0.SR6-archetype</artifactId>
+      <version>19.0.SR6</version>
+      <description>adapter-guisso-template-19.0.SR6</description>
+    </archetype>
+    <archetype>
+      <groupId>com.nokia.netguard.adapter.autologinexecutable</groupId>
+      <artifactId>selenium-autolaunch-template-19.0.SR6-archetype</artifactId>
+      <version>19.0.SR6</version>
+      <description>selenium-autolaunch-template-19.0.SR6</description>
+    </archetype>
+  </archetypes>
+</archetype-catalog>

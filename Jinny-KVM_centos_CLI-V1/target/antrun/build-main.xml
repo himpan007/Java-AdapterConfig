@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<project name="maven-antrun-" default="main"  >
+<target name="main">
+  <move file="C:\NOKIA\AdaptorDevelopmentToolkit\ADT-19.0.SR6-workspace\workspace\Jinny-KVM_centos_CLI-V1/target/./Jinny-KVM_centos_CLI-V1-19.0.SR6-STD-0.1-GSC.jar" toFile="C:\NOKIA\AdaptorDevelopmentToolkit\ADT-19.0.SR6-workspace\workspace\Jinny-KVM_centos_CLI-V1/target/./Jinny-KVM_centos_CLI-V1-19.0.SR6-STD-0.1-GSC.nak"/>
+</target>
+</project>

@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.nokia.netguard</groupId>
+		<artifactId>adapter</artifactId>
+		<version>19.0.SR6</version>
+		<relativePath>../../adapter</relativePath>
+	</parent>
+	<groupId>com.nokia.netguard.adapter.ISE.Jinny</groupId>
+	<artifactId>Jinny-KVM_centos_CLI-V1</artifactId>
+	<packaging>jar</packaging>
+	<version>19.0.SR6-STD-0.1-GSC</version>
+	<properties>
+		<!-- default Test Suite to run -->
+		<testSuite>OfflineSuite</testSuite>
+		
+		<customer>ISE</customer>
+		<adapter-type>STD</adapter-type>
+		
+		<archetype-name>SSH/Telnet CLI</archetype-name>
+		<archetype-description>Adapter for CLI SSH and Telnet interface. Covers all requests.</archetype-description>
+		<archetype-interfaces>SSH,Telnet</archetype-interfaces>
+		<archetype-requests>CLIsso,CRUD,Fingerprint,GSrecon,GSretr,Keepalive,PassRota,PrivEscal,other</archetype-requests>
+		<archetype-id>com.nokia.netguard.adapter:adapter-cli-template-19.0.SR6-archetype:19.0.SR6</archetype-id>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.jcraft</groupId>
+			<artifactId>jsch</artifactId>
+			<version>0.1.54</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>commons-net</groupId>
+			<artifactId>commons-net</artifactId>
+			<version>3.6</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<profiles>
+		<!-- This is a template profile for multi-adapter project,
+			where you can produce multiple adapters from same sourcecode.
+			The adapters would only differ by "adapter definition xmls"
+			and possibly different request handler classes defined in those xmls. -->
+		<profile>
+			<id>[Vendor]-[Model]-[Version]</id>
+			<properties>
+				<adapterDefinitionDir>[Vendor]-[Model]-[Version]</adapterDefinitionDir>
+				<testSuite>[Vendor][Model][Version]Suite</testSuite>
+				<nak-file>${adapterDefinitionDir}-${project.version}</nak-file>
+			</properties>
+			<build>
+				<directory>${basedir}/target/${adapterDefinitionDir}</directory>
+			</build>
+		</profile>
+
+		<profile>
+			<id>adapter-build</id>
+			<activation>
+				<property>
+					<name>!adt-workspace-build</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-resources-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-jar-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-compiler-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-assembly-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-antrun-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>sonar-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>cobertura-maven-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-install-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-deploy-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+					</plugin>
+					<plugin>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>exec-maven-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+
+		<profile>
+			<id>adt-workspace-build</id>
+			<activation>
+				<property>
+					<name>adt-workspace-build</name>
+				</property>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-archetype-plugin</artifactId>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+</project>

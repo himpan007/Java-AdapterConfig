@@ -1,0 +1,5 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Wed Aug 07 11:16:40 IST 2019
+https\://repo.lab.pl.alcatel-lucent.com/security-mvn-releases/.lastUpdated=1565156800491
+@default-central-https\://repo.maven.apache.org/maven2/.lastUpdated=1564735756958
+https\://repo.maven.apache.org/maven2/.error=Could not transfer artifact com.nokia.netguard\:adapter\:pom\:19.0.SR5a from/to central (https\://repo.maven.apache.org/maven2)\: connect timed out

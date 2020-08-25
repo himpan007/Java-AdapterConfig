@@ -1,0 +1,44 @@
+RESOURCE_TYPE,RESOURCE_SUBTYPE,RESOURCE_ID,ATTRIBUTE_NAME,TIMEOUT_IN_MILLISECONDS,COMMAND_UPDATE_ATTR,COMMAND_CREATE_ATTR,COMMAND_DELETE_ATTR
+
+#ResourceType, ResourceSubtype, ResourceId, AttributeName, TimeoutInMilliseconds, CommandUpdateAttr, CommandCreateAttr, CommandDeleteAttr
+# Configuration rules for reconciling (update, create) raw attributes
+# Place this file to the proper location as configured in <adapter>-configuration-override.xml
+# Commented lines (started with #) are not active rules
+# 
+# Commands in rules will be send to NEs via the adapter, must be valid SSH command on target devices
+# Variable $ATTRVALUE in commands will be replaced with actual value before send the command
+#
+# Rule format - see following, do not change the column order:  
+
+# 
+# Note for timeout values, you can have up to 3 timeout values (ie: for CommandUpdateAttr, CommandCreateAttr, CommandDeleteAttr in that order).
+# If you are providing multiple timeout values, then they should be semi-colon separated.
+
+OperatingSystem,RHEL7,SV-86473r2,System Files Access Permission Exceptions,130000,rpm -Va | grep '^.M' | awk '{print $3}' | while read -r line; do package=`rpm -qf $line`; rpm --setperms $package; rpm --setugids $package; done,,
+OperatingSystem,RHEL7,SV-86479r2,System Files Cryptographic Hash Exceptions,130000,rpm -Va | grep '^..5' | awk '{print $3}' | while read -r line; do package=`rpm -qf $line`; yum -y reinstall $package; done,,
+OperatingSystem,RHEL7,SV-86561r1,Null Passwords,130000,,,sed 's/nullok//' -i'.SV-86561r1' /etc/pam.d/system-auth-ac
+OperatingSystem,RHEL7,SV-86563r2,Empty Passwords,130000,sed -r 's/^PermitEmptyPasswords.*/PermitEmptyPasswords no/' -i'.SV-86563r2' /etc/ssh/sshd_config,echo "PermitEmptyPasswords no" >> /etc/ssh/sshd_config,
+OperatingSystem,RHEL7,SV-86577r1,GUI AutoLogin,130000,sed -r 's/^AutomaticLoginEnable.*/AutomaticLoginEnable=false/' -i'.SV-86577r1' /etc/gdm/custom.conf,if [ ! -f /etc/gdm/custom.conf ]; then mkdir -p /etc/gdm; echo "[daemon]" > /etc/gdm/custom.conf; fi; sed -r 's/(\[daemon\])/\1\nAutomaticLoginEnable=false/' -i'.SV-86577r1' /etc/gdm/custom.conf
+OperatingSystem,RHEL7,SV-86579r2,GUI Unrestricted Login,130000,sed -r 's/.*TimedLoginEnable.*/TimedLoginEnable=false/' -i'.SV-86577r1' /etc/gdm/custom.conf,if [ ! -f /etc/gdm/custom.conf ]; then mkdir -p /etc/gdm; echo "[daemon]" > /etc/gdm/custom.conf; fi; sed -r 's/(\[daemon\])/\1\nTimedLoginEnable=false/' -i'.SV-86577r1' /etc/gdm/custom.conf
+#OperatingSystem,RHEL7,SV-86585r3,BIOS Authentication,130000,
+#OperatingSystem,RHEL7,SV-86587r2,UEFI Authentication,130000,
+OperatingSystem,RHEL7,SV-86591r1,RSH-Server Package,130000,,,yum -y remove rsh-server
+OperatingSystem,RHEL7,SV-86593r1,YPSERV Package,130000,,,yum -y remove ypserv
+OperatingSystem,RHEL7,SV-86601r1,Package Signature Checks,130000,sed -r 's/^gpgcheck.*/gpgcheck=1/' -i'.SV-86601r1' /etc/yum.conf,sed -r 's/(\[main\])/\1\gpgcheck=1/' -i'.SV-86601r1' /etc/yum.conf
+OperatingSystem,RHEL7,SV-86603r1,Local Package Signature Checks,130000,sed -r 's/^localpkg_gpgcheck.*/localpkg_gpgcheck=1/' -i'.SV-86603r1' /etc/yum.conf,sed -r 's/(\[main\])/\1\nlocalpkg_gpgcheck=1/' -i'.SV-86603r1' /etc/yum.conf
+OperatingSystem,RHEL7,SV-86605r1,Package Metadata,130000,sed -r 's/^repo_gpgcheck.*/repo_gpgcheck=1/' -i'.SV-86605r1' /etc/yum.conf,sed -r 's/(\[main\])/\1\nrepo_gpgcheck=1/' -i'.SV-86605r1' /etc/yum.conf
+OperatingSystem,RHEL7,SV-86613r2,SELinux Enforcing,130000,sed 's/^SELINUX=.*/SELINUX=enforcing/' -i'.SV-86613r2' /etc/selinux/config
+OperatingSystem,RHEL7,SV-86615r2,SELinux Enforcing,130000,sed 's/^SELINUXTYPE=.*/SELINUXTYPE=targeted/' -i'.SV-86613r2' /etc/selinux/config
+OperatingSystem,RHEL7,SV-86617r1,Ctrl-Alt-Delete Service,130000,systemctl mask ctrl-alt-del.target; sed -r "s/logout.*/logout=''/" -i'.SV-86617r1' /etc/dconf/db/local.d/00-disable-CAD,if [ ! -f /etc/dconf/db/local.d/00-disable-CAD ]; then mkdir -p //etc/dconf/db/local.d; fi; if [ ! `grep "\[org/gnome/settings-daemon/plugins/media-keys\]" /etc/dconf/db/local.d/00-disable-CAD` ]; then echo "[org/gnome/settings-daemon/plugins/media-keys]" >> /etc/dconf/db/local.d/00-disable-CAD; echo "logout=''" >> /etc/dconf/db/local.d/00-disable-CAD; fi;  if [ ! `grep "logout=''" /etc/dconf/db/local.d/00-disable-CAD` ]; then echo "logout=''" >> /etc/dconf/db/local.d/00-disable-CAD; fi;
+#OperatingSystem,RHEL7,SV-86621r2,OS Supported Release,130000,
+#OperatingSystem,RHEL7,SV-86629r1,Root Authority,130000,
+#OperatingSystem,RHEL7,SV-86691r2,NIST FIPS-validated Cryptography,130000,
+OperatingSystem,RHEL7,SV-86701r1,Telnet Server,130000,,,yum -y remove telnet-server
+OperatingSystem,RHEL7,SV-86703r1,OS Audit Records,130000,systemctl start auditd.service
+OperatingSystem,RHEL7,SV-86875r2,SSH Daemon Protocol,130000,sed 's/^Protocol.*/Protocol 2/' -i'.SV-86875r2' /etc/ssh/sshd_config,echo "Protocol 2" >> /etc/ssh/sshd_config
+OperatingSystem,RHEL7,SV-86901r1,Host-based Authentication,130000,,,find / -name '*.shosts' -exec rm -rf {} +
+OperatingSystem,RHEL7,SV-86923r1,Lightweight FTP Installed,130000,,,yum -y remove lftpd
+OperatingSystem,RHEL7,SV-86925r1,TFTP Server Installed,130000,,,yum -y remove tftp
+OperatingSystem,RHEL7,SV-86927r2,X11Forwarding,175000,sed -r 's/X11Forwarding.*/X11Forwarding yes/' -i'.SV-86927r2' /etc/ssh/sshd_config,echo "X11Forwarding yes" >> /etc/ssh/sshd_config
+OperatingSystem,RHEL7,SV-86937r1,SNMP Default Community Strings,130000,if [ -f /etc/snmp/snmpd.conf ]; then rndpublic=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1); rndprivate=$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 8 | head -n 1); sed 's/public/'"$rndpublic"'/' snmp.conf | sed 's/private/'"$rndprivate"'/'; fi
+

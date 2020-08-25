@@ -1,0 +1,4 @@
+#NOTE: This is an Aether internal implementation file, its format can be changed without prior notice.
+#Fri Aug 02 14:29:20 IST 2019
+@default-central-https\://repo.maven.apache.org/maven2/.lastUpdated=1564736360767
+https\://repo.maven.apache.org/maven2/.error=Could not transfer artifact epsec.products.framework\:publishedInterfaceExtensions\:pom\:19.0.20 from/to central (https\://repo.maven.apache.org/maven2)\: connect timed out
