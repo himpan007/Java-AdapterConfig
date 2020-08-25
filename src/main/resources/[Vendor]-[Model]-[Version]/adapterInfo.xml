@@ -1,0 +1,42 @@
+<axs:adapterInfo xmlns:axs="com/nakina/oss/shared/adapter"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    vendor="[Vendor]"
+    model="[Model]"
+    neVersion="[Version]"
+    neVersionPattern="[VersionPattern]"
+    adapterVersion="${project.version}"
+    author="Nokia Software / GSC"
+    useSharedJarsClassLoader="false">
+    
+    <!--  The attributes in the above block can be updated manually if required. -->
+    <!--  The vendor, model and neVersion will appear in the Adapter Manager GUI.-->
+    <!--  The neVersionPattern is a regular expression used by fingerprinting. If the version of the NE matches the vendor name, the model name AND the regular 
+          expression neVersionPattern, then the NE will pass the fingerprint process and can be managed by this adapter.-->
+    <!--  The adapterVersion is automatically set by the build process. -->
+    <!--  The author will appear in the Adapter Manager GUI as the Author: of this adapter. It is intended to be the name of the Organization that developed the adapter. -->
+
+    <!-- TODO There should be one neType block per type of NE that is supported by this adapter.
+         The complete list of NE Types is available in the javadocs for com.nakina.shared.extension.type.inventory.ManagedElementType.    
+         For each neType block, there should be a list of all Application Level functionality that that 
+         NE Type and that the adapter has implemented For example:
+
+    		<neType name="Generic">
+         		<application name="com.nakina.oss.shared.type.ApplicationType#INVENTORY" />
+   		
+   		The full list of possible Application Types is available in the javadocs at
+        com.nakina.oss.shared.type.ApplicationType
+         
+         -->
+   <neTypes>
+    <neType name="Generic">
+<!--    	<application name="com.nakina.oss.shared.type.ApplicationType#INVENTORY" />-->
+    <!--  add additional entries here -->
+    </neType>
+   </neTypes>
+
+  <components>
+    <component type="RequestProfiles" filename="requestProfiles.xml"/>
+    <component type="CapabilityProfiles" filename="capabilityProfiles.xml"/>
+  </components>
+  
+</axs:adapterInfo>

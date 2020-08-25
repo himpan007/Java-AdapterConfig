@@ -1,0 +1,40 @@
+RESOURCE_TYPE,RESORUCE_SUBTYPE,RESOURCE_ID,ATTRIBUTE_NAME,TIMEOUT_IN_MILLISECONDS,COMMAND
+#ResourceType, ResoruceSubtype, ResourceId, AttributeName, TimeoutInMilliseconds, Command (RetrieveAttributeValue)
+# Configuration rules for retrieving raw attributes values
+# Place this file to the proper location as configured in <adapter>-configuration-override.xml.
+#
+# Commented lines (started with #) are not active rules.
+#
+# Commands, would be send to NEs via the adapter, must be valid SSH Command on NEs under the test.  
+# 
+# Rule format - see following, do not change the column order: 
+
+OperatingSystem,RHEL7,SV-86473r2,System Files Access Permission Exceptions,130000,rpm -Va | grep '^.M'
+OperatingSystem,RHEL7,SV-86479r2,System Files Cryptographic Hash Exceptions,130000,rpm -Va | grep '^..5'
+OperatingSystem,RHEL7,SV-86561r1,Null Passwords,130000,grep nullok /etc/pam.d/system-auth-ac
+OperatingSystem,RHEL7,SV-86563r2,Empty Passwords,130000,grep -i '^PermitEmptyPasswords' /etc/ssh/sshd_config
+OperatingSystem,RHEL7,SV-86577r1,GUI AutoLogin,130000,grep -i '^AutomaticLoginEnable' /etc/gdm/custom.conf
+OperatingSystem,RHEL7,SV-86579r2,GUI Unrestricted Login,130000,grep -i '^TimedLoginEnable' /etc/gdm/custom.conf
+OperatingSystem,RHEL7,SV-86585r3,BIOS Authentication,130000,grep -i "password_pbkdf2" /boot/grub2/grub.cfg
+OperatingSystem,RHEL7,SV-86587r2,UEFI Authentication,130000,grep -i "password" /boot/efi/EFI/redhat/grub.cfg
+OperatingSystem,RHEL7,SV-86591r1,RSH-Server Package,130000,yum list installed rsh-server
+OperatingSystem,RHEL7,SV-86593r1,YPSERV Package,130000,yum list installed ypserv
+OperatingSystem,RHEL7,SV-86601r1,Package Signature Checks,130000,grep ^gpgcheck /etc/yum.conf
+OperatingSystem,RHEL7,SV-86603r1,Local Package Signature Checks,130000,grep ^localpkg_gpgcheck /etc/yum.conf
+OperatingSystem,RHEL7,SV-86605r1,Package Metadata,130000,grep ^repo_gpgcheck /etc/yum.conf
+OperatingSystem,RHEL7,SV-86613r2,SELinux Enforcing,130000,getenforce
+OperatingSystem,RHEL7,SV-86615r2,SELinux Policy,130000,sestatus | grep "Loaded policy name" | awk -F ':' '{print $2}' | sed 's/^[ \t]*//'
+OperatingSystem,RHEL7,SV-86617r1,Ctrl-Alt-Delete Service,130000,systemctl status ctrl-alt-del.service 2>&1 | grep 'Active:' | awk 'BEGIN {ORS=" "} {for (i=2; i<=NF; i++) print $i} {print "\n"}'
+OperatingSystem,RHEL7,SV-86621r2,OS Supported Release,130000,cat /etc/redhat-release
+OperatingSystem,RHEL7,SV-86629r1,Root Authority,130000,awk -F ':' '$3 == 0 {print $1}' /etc/passwd
+OperatingSystem,RHEL7,SV-86691r2,NIST FIPS-validated Cryptography,130000,yum list installed dracut-fips 2>&1; grep fips /boot/grub2/grub.cfg; cat /proc/sys/crypto/fips_enabled
+OperatingSystem,RHEL7,SV-86701r1,Telnet Server,130000,yum list installed telnet-server
+OperatingSystem,RHEL7,SV-86703r1,OS Audit Records,130000,systemctl is-active auditd.service
+OperatingSystem,RHEL7,SV-86875r2,SSH Daemon Protocol,130000,grep -i ^Protocol /etc/ssh/sshd_config | grep -v '^\#'
+OperatingSystem,RHEL7,SV-86901r1,Host-based Authentication,130000,find / -name '*.shosts' | awk '{print $0} END {if (!NF) print "none"}'
+OperatingSystem,RHEL7,SV-86923r1,Lightweight FTP Installed,130000,yum list installed lftpd
+OperatingSystem,RHEL7,SV-86925r1,TFTP Server Installed,130000,yum list installed tftp-server
+OperatingSystem,RHEL7,SV-86927r2,X11Forwarding,130000,grep -i ^X11Forwarding /etc/ssh/sshd_config
+
+OperatingSystem,RHEL7,SV-86937r1,SNMP Default Community Strings,130000,if [ -f /etc/snmp/snmpd.conf ]; then grep public /etc/gdm/custom.conf | awk '{print $0} END {if (!NF) print "public not found"}' ; grep private /etc/gdm/custom.conf | awk '{print $0} END {if (!NF) print "private not found"}'; fi
+

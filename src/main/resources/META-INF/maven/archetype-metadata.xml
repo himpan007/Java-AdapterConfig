@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<archetype-descriptor
+	xsi:schemaLocation="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0 http://maven.apache.org/xsd/archetype-descriptor-1.0.0.xsd"
+	name="ubuntu-xubuntu-v16"
+	xmlns="http://maven.apache.org/plugins/maven-archetype-plugin/archetype-descriptor/1.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<requiredProperties>
+		<requiredProperty key="Jinny"/>
+		<requiredProperty key="KVM_centos_CLI"/>
+		<requiredProperty key="V1"/>
+		<requiredProperty key=".*"/>
+		<requiredProperty key="ISE"/>
+		<requiredProperty key="Nokia Software / GSC"/>
+		<requiredProperty key="STD"/>
+		<requiredProperty key="groupId">
+			<defaultValue>com.nokia.netguard.adapter.${ISE}.${Jinny}</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="artifactId">
+			<defaultValue>Jinny-KVM_centos_CLI-V1</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="package">
+			<defaultValue>com.nokia.netguard.adapter</defaultValue>
+		</requiredProperty>
+		<requiredProperty key="com.nokia.netguard.adapter:adapter-cli-template-19.0.SR6-archetype:19.0.SR6">
+			<defaultValue>${archetypeGroupId}:${archetypeArtifactId}:${archetypeVersion}</defaultValue>
+		</requiredProperty>
+	</requiredProperties>	
+	<fileSets>
+		<fileSet filtered="true" packaged="true" encoding="UTF-8">
+			<directory>src/main/java</directory>
+			<includes>
+				<include>**/*.java</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" encoding="UTF-8">
+			<directory>src/main/resources</directory>
+			<includes>
+				<include>**/*.xml</include>
+				<include>**/*.properties</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" packaged="true" encoding="UTF-8">
+			<directory>src/test/java</directory>
+			<includes>
+				<include>**/*.java</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" encoding="UTF-8">
+			<directory>src/test/java</directory>
+			<includes>
+				<include>**/*.properties</include>
+			</includes>
+		</fileSet>
+		<fileSet filtered="true" encoding="UTF-8">
+			<directory>src/test/resources</directory>
+			<includes>
+				<include>**/*.properties</include>
+			</includes>
+		</fileSet>
+	</fileSets>
+</archetype-descriptor>

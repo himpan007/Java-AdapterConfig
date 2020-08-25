@@ -1,0 +1,126 @@
+MAVEN_HOME="/opt/apache-maven-3.5.0"
+ 
+def configureMavenSettings() {
+    withCredentials([usernamePassword(credentialsId: 'security-artifactory', usernameVariable: 'ARTIFACTORY_USER', passwordVariable: 'ARTIFACTORY_PASSWORD')]) {
+        sh """
+            sed -i "s/ARTIFACTORY_USER/${ARTIFACTORY_USER}/g" $MAVEN_HOME/conf/settings.xml
+            sed -i "s/ARTIFACTORY_PASSWORD/${ARTIFACTORY_PASSWORD}/g" $MAVEN_HOME/conf/settings.xml
+            cat $MAVEN_HOME/conf/settings.xml
+        """
+    }
+}
+ 
+ 
+pipeline {
+    agent {
+        kubernetes {
+            label "k8s-adapters-adapters"
+            inheritFrom 'k8s-build'
+            containerTemplate(name: 'adapters-adapters',
+                    image: 'security-docker-releases.repo.lab.pl.alcatel-lucent.com/common/adapters_builder:latest-release',
+                    alwaysPullImage: true,
+                    workingDir: '/home/jenkins',
+                    ttyEnabled: true,
+                    args: '',
+                    command: 'cat',
+                    privileged: true
+            )
+        }
+    }
+    options {
+        buildDiscarder(logRotator(numToKeepStr: '20'))
+        timestamps()
+    }
+    environment {
+        NSMA_ARTIFACTORY_SNAPSHOT = 'security-mvn-snapshots'
+    }      
+    stages {
+        stage('configure maven settings') {
+            steps {
+                container('adapters-adapters') {
+                    withCredentials([[$class          : 'UsernamePasswordMultiBinding',
+                                      credentialsId   : 'security-artifactory',
+                                      usernameVariable: 'artifactoryUser', passwordVariable: 'artifactoryPasswd']]) {
+                        configureMavenSettings()
+                    }
+                }  
+            }
+        }
+        stage('package') {
+            steps {
+                container('adapters-adapters') {
+                    script {
+                            sh """
+                                $MAVEN_HOME/bin/mvn clean package
+                            """
+                    }
+                }
+            }
+            post {
+                always {
+                  junit 'target/surefire-reports/*.xml'
+                }
+            }  
+        }
+         
+        stage ('Publish nak snapshot') {    
+            steps {
+                container('adapters-adapters') {
+                    script {
+                            POM_GROUP_ID = sh(
+                                script: "echo \$(mvn help:evaluate -Dexpression=project.groupId -q -DforceStdout)",
+                                returnStdout: true,
+                            ).trim()
+                             
+                            DEPLOY_GROUP_ID = POM_GROUP_ID.replaceAll("\\.", "/").trim()   
+                            echo DEPLOY_GROUP_ID
+ 
+                            POM_ARTIFACT_ID = sh(
+                                script: "echo \$($MAVEN_HOME/bin/mvn help:evaluate -Dexpression=project.artifactId  -q -DforceStdout)",
+                                returnStdout: true,
+                              ).trim()                 
+                            POM_VERSION = sh(
+                                script: "echo \$($MAVEN_HOME/bin/mvn help:evaluate -Dexpression=project.version -q -DforceStdout)",
+                                returnStdout: true,
+                              ).trim()                                     
+                             
+                     
+                      //
+                      // Documentation for the Jenkins Artifactory Plug-in
+                      // https://www.jfrog.com/confluence/display/RTF/Jenkins+Artifactory+Plug-in
+                      // https://www.jfrog.com/confluence/display/RTF/Working+With+Pipeline+Jobs+in+Jenkins
+                      //
+                      // Lookup the Artifactory server from the global environment variable
+                      // https://confluence.app.alcatel-lucent.com/display/AACTODEVOPS/Jenkins+environment+and+contract        
+                      def artifactoryServer = Artifactory.server env.ARTIFACTORY_SERVER_ID
+                      artifactoryServer.credentialsId = 'security-artifactory'
+                      // Collect build info
+                      def buildInfo = Artifactory.newBuildInfo()
+                      // exclude environment variables.
+ 
+                      buildInfo.env.filter.addExclude("*CREDENTIAL*")
+                      buildInfo.env.capture = true
+                      buildInfo.env.collect()
+                      // The trailing slash on the "target" path is required to create a target directory in the repo
+                      def uploadSpec = """{
+                        "files": [
+                          {
+                            "pattern": "target/*.nak",
+                            "target": "${NSMA_ARTIFACTORY_SNAPSHOT}/${DEPLOY_GROUP_ID}/${POM_ARTIFACT_ID}/${POM_VERSION}/"
+                          },
+                          {
+                            "pattern": "target/*.validator-report.html",
+                            "target": "${NSMA_ARTIFACTORY_SNAPSHOT}/${DEPLOY_GROUP_ID}/${POM_ARTIFACT_ID}/${POM_VERSION}/"
+                          }
+                        ]
+                }              
+                      """
+                      // Upload files and publish build              
+                      artifactoryServer.upload(uploadSpec, buildInfo)
+                      artifactoryServer.publishBuildInfo(buildInfo)
+                    }
+                }              
+            }
+        }      
+    }
+}

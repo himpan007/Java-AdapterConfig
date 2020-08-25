@@ -1,0 +1,23 @@
+RESOURCE_TYPE,RESOURCE_SUBTYPE,RESOURCE_ID,COMMAND_CREATE_RESOURCE,COMMON_COMMANDCREATE_ATTRIBUTES,COMMAND_DELETE_RESOURCE
+
+#ResourceTypeTest1,subType1,RESID-TEST.1,echo create >> /tmp/asdf
+# Configuration rules for creating resources, with or without raw attributes  
+# Place this file into the proper location as configured in <adapter>-configuration-override.xml
+#
+# Commented lines (started with #) are not active rules
+#
+# Notes:
+# Commands, would be send to NEs via the adapter, must be valid SSH command on your target devices
+# Variables $ATTRNAME and $ATTRVALUE in commands will be replaced with actual parameters via adapter before send the command
+#
+# Rule format - see following, do not change the column order:
+# ResourceType, ResourceSubtype, ResourceId, CommandCreateResource,[CommonCommandCreateAttributes],CommandDeleteResource
+#
+# example rule to create a resource - create a new file:
+#
+# examples of creating resource and associated attributes
+#
+ResourceTypeTest1,subType1,resourceID,echo $ATTRNAME >> /tmp/asdf,echo $ATTRNAME=$ATTRVALUE >> /tmp/asdf,echo deleteResource1
+ResourceTypeTest1,subType1,resourceID2,echo $ATTRNAME >> /tmp/asdf,echo $ATTRNAME=$ATTRVALUE >> /tmp/asdf,echo deleteResource2
+ResourceTypeTest1,subType2,resourceID2,echo $ATTRNAME >> /tmp/asdf,echo $ATTRNAME=$ATTRVALUE >> /tmp/asdf,echo deleteResource2Sub2
+

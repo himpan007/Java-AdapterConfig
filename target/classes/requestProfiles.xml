@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="ASCII"?>
+<adapter:requestMap xmlns:adapter="com/nakina/oss/shared/adapter"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="com/nakina/oss/netagent/adapter/xml com/nakina/oss/netagent/adapter/xsd/adapter.xsd">
+
+	<!-- =============================================== -->
+	<!-- Association Management Requests                 -->
+	<!-- =============================================== -->
+	
+  <request name="Login_REQ"
+      class="com.nokia.netguard.adapter.requests.sso.LoginRequestHandler"
+      executionContext="Agent"
+      interface="CLI"
+      lock="Interface"/>
+
+  <request name="Logout_REQ"
+      class="com.nokia.netguard.adapter.requests.sso.LogoutRequestHandler"
+      executionContext="Agent"
+      interface="CLI"
+      lock="Interface"/>
+
+  <request name="Fingerprint_REQ"
+      class="com.nokia.netguard.adapter.requests.sso.FingerprintRequestHandler"
+      executionContext="Agent"
+      interface="CLI"
+      lock="Interface"/>
+
+  <request name="Keepalive_REQ"
+      class="com.nokia.netguard.adapter.requests.sso.KeepaliveRequestHandler"
+      executionContext="Agent"
+      interface="CLI"
+      lock="Interface"/>
+
+	<!-- ================================================= 	-->
+	<!-- GoldStandard requests 								-->
+	<!-- ================================================= 	-->
+	
+	<request name="RetrieveResourceRawAttrs_REQ"
+		class="com.nokia.netguard.adapter.requests.gs.resource.retrieval.RetrieveResourceRawAttributesRequestHandler"
+		executionContext="Agent" interface="CLI" lock="Interface" />
+
+	<request name="EditResourcesRawAttributes_REQ" interface="CLI"
+		executionContext="Agent" lock="Interface"
+		class="com.nokia.netguard.adapter.requests.gs.reconcile.attribute.EditResourceRawAttributesRequestHandler"
+		publish="true" />
+
+	<request name="CreateResourcesRawAttributes_REQ" interface="CLI"
+		executionContext="Agent" lock="Interface"
+		class="com.nokia.netguard.adapter.requests.gs.reconcile.attribute.CreateResourcesRawAttributesRequestHandler"
+		publish="true" />
+
+	<request name="CreateResource_REQ" interface="CLI"
+		executionContext="Agent" lock="Interface"
+		class="com.nokia.netguard.adapter.requests.gs.reconcile.resource.CreateResourceRequestHandler"
+		publish="true" />
+
+	<request name="DeleteResourcesRawAttributes_REQ" interface="CLI"
+		executionContext="Agent" lock="Interface"
+		class="com.nokia.netguard.adapter.requests.gs.reconcile.attribute.DeleteResourcesRawAttributesRequestHandler"
+		publish="true" />
+
+	<request name="DeleteResources_REQ" interface="CLI"
+		executionContext="Agent" lock="Interface"
+		class="com.nokia.netguard.adapter.requests.gs.reconcile.resource.DeleteResourcesRequestHandler"
+		publish="true" />
+
+	<request name="CommandResourceRawAttribute_REQ" interface="CLI"
+		executionContext="Agent" lock="Interface"
+		class="com.nokia.netguard.adapter.requests.gs.reconcile.command.CommandResourceRawAttributeRequestHandler"
+		publish="true" />
+
+	<request name="CommandResource_REQ" interface="CLI"
+		executionContext="Agent" lock="Interface"
+		class="com.nokia.netguard.adapter.requests.gs.reconcile.command.CommandResourceRequestHandler"
+		publish="true" />
+
+	<!-- ======================================================== -->
+	<!-- Security requests -->
+	<!-- ======================================================== -->
+
+	<request name="EditMyPassword_REQ"
+		class="com.nokia.netguard.adapter.requests.crud.NESecurityEditMyPasswordRequestHandler"
+		executionContext="Agent" interface="CLI" lock="Interface" />
+
+	<request name="CreateUser_REQ"
+		class="com.nokia.netguard.adapter.requests.crud.NESecurityCreateUserRequestHandler"
+		executionContext="Agent" interface="CLI" lock="Interface" />
+
+	<request name="EditUser_REQ"
+		class="com.nokia.netguard.adapter.requests.crud.NESecurityEditUserRequestHandler"
+		executionContext="Agent" interface="CLI" lock="Interface" />
+
+	<request name="DeleteUser_REQ"
+		class="com.nokia.netguard.adapter.requests.crud.NESecurityDeleteUserRequestHandler"
+		executionContext="Agent" interface="CLI" lock="Interface" />
+
+	<request name="EscalatePrivilege_REQ"
+		class="com.nokia.netguard.adapter.requests.pe.NESecurityEscalatePrivilegeRequestHandler"
+		executionContext="Agent" interface="CLI" lock="Interface" />
+
+</adapter:requestMap>
+           
